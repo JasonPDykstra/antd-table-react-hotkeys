@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "antd": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-hotkeys": "2.0.0"
+  }
+}
