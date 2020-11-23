@@ -45,12 +45,37 @@ const data = [
     name: "Disabled User",
     age: 99,
     address: "Sidney No. 1 Lake Park"
+  },
+  {
+    key: "5",
+    name: "John Brown",
+    age: 32,
+    address: "New York No. 1 Lake Park"
+  },
+  {
+    key: "6",
+    name: "Jim Green",
+    age: 42,
+    address: "London No. 1 Lake Park"
+  },
+  {
+    key: "7",
+    name: "Joe Black",
+    age: 32,
+    address: "Sidney No. 1 Lake Park"
+  },
+  {
+    key: "8",
+    name: "Disabled User",
+    age: 99,
+    address: "Sidney No. 1 Lake Park"
   }
 ];
 
 const keyMap = {
   INVERT: "ctrl+i",
-  SELECT_ALL: "ctrl+a"
+  SELECT_ALL: "ctrl+a",
+  DE_SELECT_ALL: "ctrl+d"
 };
 
 class App extends React.Component {
@@ -75,16 +100,22 @@ class App extends React.Component {
     this.setState({ selectedRowKeys });
     event.preventDefault();
   };
+  deSelectAll = (selectedRowKeys) => {
+    selectedRowKeys = [];
+    this.setState({ selectedRowKeys });
+    event.preventDefault();
+  };
   invertAll = (selectedRowKeys) => {
     const selectedRows = [...this.state.selectedRowKeys];
     const allRowKeys = data.map((item) => item.key);
-    selectedRowKeys = allRowKeys.filter(x => !selectedRows.includes(x));
+    selectedRowKeys = allRowKeys.filter((x) => !selectedRows.includes(x));
     this.setState({ selectedRowKeys });
   };
   render() {
     const handlers = {
       INVERT: this.invertAll,
-      SELECT_ALL: this.selectAll
+      SELECT_ALL: this.selectAll,
+      DE_SELECT_ALL: this.deSelectAll
     };
     const { selectedRowKeys } = this.state;
     const rowSelection = {
