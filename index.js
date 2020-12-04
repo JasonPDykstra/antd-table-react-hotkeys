@@ -80,16 +80,32 @@ const keyMap = {
 
 class App extends React.Component {
   state = {
-    selectedRowKeys: []
+    selectedRowKeys: [],
+    lastSelected: 0
   };
-  selectRow = (record) => {
-    const selectedRowKeys = [...this.state.selectedRowKeys];
+  selectRow = (record, evt) => {
+    var selectedRowKeys = [...this.state.selectedRowKeys];
+
     if (selectedRowKeys.indexOf(record.key) >= 0) {
       selectedRowKeys.splice(selectedRowKeys.indexOf(record.key), 1);
     } else {
       selectedRowKeys.push(record.key);
     }
-    this.setState({ selectedRowKeys });
+    if (evt.shiftKey) {
+      var allRowKeys = data.map((item) => item.key);
+      var lastSelectedRow =
+        this.state.lastSelected === undefined
+          ? allRowKeys[0]
+          : this.state.lastSelected.key;
+      var shiftSelect = allRowKeys.slice(
+        allRowKeys.indexOf(lastSelectedRow),
+        allRowKeys.indexOf(record.key) + 1
+      );
+      selectedRowKeys = shiftSelect
+        .concat(selectedRowKeys)
+        .filter((item, i, ar) => ar.indexOf(item) === i);
+    }
+    this.setState({ selectedRowKeys, lastSelected: record });
   };
   onSelectedRowKeysChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
@@ -129,8 +145,8 @@ class App extends React.Component {
           columns={columns}
           dataSource={data}
           onRow={(record) => ({
-            onClick: () => {
-              this.selectRow(record);
+            onClick: (e) => {
+              this.selectRow(record, e);
             }
           })}
         />
